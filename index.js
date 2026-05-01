@@ -1,20 +1,30 @@
 import http from 'node:http';
 import fs from 'node:fs/promises';
 
-let internalError;
-
 async function getPage(pageName) {
-  const pagesNames = ['index', 'about', 'contact', '404'];
+  let filePath = './404.html';
 
-  const isPageValid = pagesNames.find((element) => element === pageName);
-  if (!isPageValid) {
-    try {
-      const errorPage = await fs.readFile('./404.html');
-      return errorPage;
-    } catch (erorr) {
-      console.error(error);
-      console.error("Couldn't find 404 page file");
-    }
+  switch (pageName) {
+    case '':
+      filePath = './index.html';
+      break;
+    case 'about':
+      filePath = './about.html';
+      break;
+    case 'contact-me':
+      filePath = './contact-me.html';
+      break;
+    default:
+      filePath = './404.html';
+      break;
+  }
+
+  try {
+    const page = await fs.readFile(filePath);
+    return page;
+  } catch (error) {
+    console.error(error);
+    console.error(`Couldn't find page file`);
   }
 }
 
@@ -27,11 +37,11 @@ const server = http.createServer(async (request, response) => {
   const url = new URL(request.url, 'https://localhost');
   const path = url.pathname;
 
-  const pageName = path.slice(0, -1);
+  const pageName = path.slice(1);
   const page = await getPage(pageName);
 
   response.writeHead(200);
   response.end(page);
 });
 
-server.listen(8000);
+server.listen(8080);
