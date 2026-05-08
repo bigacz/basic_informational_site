@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/bigacz/basic_informational_site/issues"
   },
-  "homepage": "https://github.com/bigacz/basic_informational_site#readme"
+  "homepage": "https://github.com/bigacz/basic_informational_site#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
